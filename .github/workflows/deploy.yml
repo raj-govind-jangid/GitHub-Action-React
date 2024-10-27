@@ -1,0 +1,48 @@
+name: Deploy React App to AWS EC2 (Ubuntu) Main Branch
+
+on:
+  push:
+    branches:
+      - main  # Deploy only when code is pushed to the main branch
+
+jobs:
+  deploy:
+    name: Deploy React App Main Branch
+    runs-on: ubuntu-latest  # Use an Ubuntu runner for GitHub Actions
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies and build
+        run: |
+          npm install
+          npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: react-app-build
+          path: build/
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: react-app-build
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.AWS_PEM_KEY }}" > ~/.ssh/aws_ec2.pem
+          chmod 600 ~/.ssh/aws_ec2.pem
+
+      - name: Deploy to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/aws_ec2.pem -r build/* ubuntu@<13.232.41.139>:/var/www/html/
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.AWS_PEM_KEY }}
