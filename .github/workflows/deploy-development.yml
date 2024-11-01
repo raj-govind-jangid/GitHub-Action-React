@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies and build
         run: |
           npm install
-          npm run build dev
+          npm run build:dev
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
