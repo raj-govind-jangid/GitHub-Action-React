@@ -7,7 +7,7 @@ const AddItem = () => {
   const navigate = useNavigate();
 
   const addItem = async () => {
-    await axios.post('http://localhost:5000/api/items', { name });
+    await axios.post(`${process.env.REACT_APP_API_URL}/items`, { name });
     navigate('/');
   };
 

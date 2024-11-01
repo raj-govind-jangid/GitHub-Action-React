@@ -3,7 +3,7 @@ name: Deploy React App to AWS EC2 (Ubuntu) Main Branch
 on:
   push:
     branches:
-      - main  # Deploy only when code is pushed to the main branch
+      - main  # Trigger on push to the main branch
 
 jobs:
   deploy:
@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies and build
         run: |
           npm install
-          npm run build
+          npm run build:live
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
@@ -43,6 +43,6 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/aws_ec2.pem -r build/* ubuntu@ec2-13-232-41-139.ap-south-1.compute.amazonaws.com:/var/www/html/main/
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/aws_ec2.pem -r build/* ubuntu@ec2-13-202-31-249.ap-south-1.compute.amazonaws.com:/var/www/html/main-react.testfordemo.info/
         env:
           SSH_PRIVATE_KEY: ${{ secrets.AWS_PEM_KEY }}

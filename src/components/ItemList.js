@@ -10,12 +10,12 @@ const ItemList = () => {
   }, []);
 
   const fetchItems = async () => {
-    const response = await axios.get('http://localhost:5000/api/items');
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/items`);
     setItems(response.data);
   };
 
   const deleteItem = async (id) => {
-    await axios.delete(`http://localhost:5000/api/items/${id}`);
+    await axios.delete(`${process.env.REACT_APP_API_URL}/items/${id}`);
     setItems(items.filter(item => item._id !== id));
   };
 
