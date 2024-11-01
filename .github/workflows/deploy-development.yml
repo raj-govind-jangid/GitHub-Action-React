@@ -3,7 +3,10 @@ name: Deploy React App to AWS EC2 (Ubuntu) Development Branch
 on:
   push:
     branches:
-      - development  # Deploy only when code is pushed to the development branch
+      - development  # Trigger on push to the development branch
+  pull_request:
+    branches:
+      - development  # Trigger on pull requests targeting the development branch
 
 jobs:
   deploy:
